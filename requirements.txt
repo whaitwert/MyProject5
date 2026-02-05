@@ -1,0 +1,11 @@
+import streamlit as st
+st.title("Въвеждане на оценки")
+score_theory = st.number_input("Въведи точки за Теория (География/История):", value=0)
+score_practical = st.number_input("Въведи точки за Практика:", value=0)
+if score_theory > 50:
+    st.write("Please check the input score for 'Theory'.") 
+elif score_practical > 50:
+    st.write("Please check the input score for 'Practical'.") 
+else:
+    total = score_theory + score_practical
+    st.write("Score validated. Your total is: ", total)
