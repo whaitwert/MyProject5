@@ -1,9 +1,50 @@
 import streamlit as st
-st.title("Въвеждане на оценки")
-theory = st.number_input("Теория (0-50):", value=0)
-practical = st.number_input("Практика (0-50):", value=0)
+
+st.set_page_config(page_title="Система за оценки", page_icon="🎓")
+
+st.title("🎓 Ситема за оценяване")
+st.markdown("Въведете точките от изпита, за да изчислите финалния резултат.")
+
+# Използваме колони за по-добър изглед
+col1, col2 = st.columns(2)
+
+with col1:
+    theory = st.number_input("Теория (0-50):", min_value=0, max_value=100, value=0)
+
+with col2:
+    practical = st.number_input("Практика (0-50):", min_value=0, max_value=100, value=0)
+
+# Проверка за границите
 if theory > 50 or practical > 50:
-    st.warning("One of the scores is too high! Please enter a value up to 50.")
+    st.error("⚠️ Грешка: Максималният брой точки за всеки компонент е 50!")
 else:
     total = theory + practical
-    st.write(f"Your total score is: **{total}**")
+    percentage = (total / 100)
+    
+    st.divider() # Хоризонтална линия
+    
+    # Показване на общия резултат
+    st.subheader(f"Общ брой точки: {total} / 100")
+    st.progress(percentage)
+
+    # Логика за определяне на оценката
+    if total >= 90:
+        grade = "Отличен (6)"
+        st.success(f"Поздравления! Вашата оценка е: **{grade}** 🌟")
+    elif total >= 75:
+        grade = "Много добър (5)"
+        st.info(f"Много добър резултат: **{grade}** 👍")
+    elif total >= 50:
+        grade = "Добър (4)"
+        st.warning(f"Резултатът ви е: **{grade}** 👌")
+    elif total >= 30:
+        grade = "Среден (3)"
+        st.warning(f"Резултатът ви е: **{grade}** 😐")
+    else:
+        grade = "Слаб (2)"
+        st.error(f"За съжаление не издържахте. Оценка: **{grade}** ❌")
+
+    # Допълнителна статистика (expandable section)
+    with st.expander("Виж детайли"):
+        st.write(f"- Процент успеваемост: {total}%")
+        st.write(f"- Остават до 100 точки: {100 - total}")
